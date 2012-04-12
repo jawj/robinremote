@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body { 
+  background: #000;
+  font: "Helvetica Neue";
+  padding: 20px;
+}
+.rocker {
+  
+}
+.down, .up {
+  position: relative;
+  float: left;
+  width: 50%;
+  border: 2px solid #bbb;
+  margin-left: -1px;
+  margin-right: -1px;
+  height: 40px;
+}
+.down {
+  border-radius: 9px 0 0 9px;
+  border-right: none;
+}
+.up {
+  border-radius: 0 9px 9px 0;
+  border-left: none;
+}
+.divider, .minus, .plus-h, .plus-v {
+  position: absolute;
+  top: 50%;
+}
+.divider {
+  right: 0;
+  border-right: 1px solid #bbb;
+  height: 20px;
+  margin-top: -10px;
+}
+.minus, .plus-h {
+  width: 20px;
+  margin-top: -2px;
+  border-top: 4px solid #bbb;
+}
+.minus {
+  left: 20px;
+}
+.plus-h {
+  right: 20px;
+}
+.plus-v {
+  margin-left: -2px;
+  border-right: 4px solid #bbb;
+  height: 20px;
+  margin-top: -10px;
+  right: 28px;
+}
+
+  
+</style>
+</head>
+<body>
+  <div class="rocker">
+    <div class="down"><div class="minus"></div><div class="divider"></div></div>
+    <div class="up"><div class="plus-h"></div><div class="plus-v"></div></div>
+  </div>
+</body>
+</html>
