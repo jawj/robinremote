@@ -9,7 +9,7 @@ page = fs.readFileSync('index.html.gz')
 httpCallback = (request, response) ->
   m = request.method
   if m in ['GET', 'HEAD']
-    if request.url = '/'
+    if request.url is '/'
       response.setHeader('Content-Encoding', 'gzip')
       response.write(page) if m is 'GET'
     else
