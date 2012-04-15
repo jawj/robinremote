@@ -3,6 +3,7 @@
 WebSocketServer = require('websocket').server
 fs = require('fs')
 http = require('http')
+port = 80
 
 page = fs.readFileSync('index.html.gz')
 httpCallback = (request, response) ->
