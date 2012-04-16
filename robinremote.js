@@ -146,7 +146,8 @@
   button = function(parent, func) {
     var btn, e, releaseLstn, touchLstn, _i, _j, _len, _len1;
     btn = tag({
-      parent: parent
+      parent: parent,
+      text: ' '
     });
     touchLstn = function(e) {
       if (e.type === 'touchstart') {

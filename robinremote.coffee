@@ -64,7 +64,7 @@ rocker = (parent, downFunc, upFunc) ->
   releaseLstn()
 
 button = (parent, func) ->
-  btn = tag {parent}
+  btn = tag {parent, text: ' '}
   
   touchLstn = (e) ->
     obeyMouseEvents = no if e.type is 'touchstart'
