@@ -28,36 +28,54 @@ load = (opts, callback) ->
 
 cmd = (command) -> load(url: 'http://gravity.shrtct.com/' + command)
 
+touchEvents = ['mousedown', 'touchstart']
+releaseEvents = ['mouseup', 'touchend']
+
+obeyMouseEvents = yes
+
 rocker = (parent, downFunc, upFunc) ->
   outer = tag {className: 'rocker', parent}
+    
   down = tag {className: 'down', parent: outer}
   tag {className: 'minus', parent: down}
   tag {className: 'divider', parent: down}
+    
   up = tag {className: 'up', parent: outer}
   tag {className: 'plus-h', parent: up}
   tag {className: 'plus-v', parent: up}
-  tag {className: 'shadow-hider', parent: up}   
-  down.addEventListener 'mousedown', ->
+  tag {className: 'shadow-hider', parent: up}
+    
+  downTouchLstn = (e) ->
+    obeyMouseEvents = no if e.type is 'touchstart'
+    return unless e.type is 'touchstart' or obeyMouseEvents
     down.stdClass = down.className
     down.className += ' highlighted'
-    downFunc()  
-  down.addEventListener 'mouseup', ->
-    down.className = down.stdClass
-  up.addEventListener 'mousedown', ->
+    downFunc()
+  down.addEventListener(e, downTouchLstn) for e in touchEvents
+  downReleaseLstn = (e) -> down.className = down.stdClass
+  down.addEventListener(e, downReleaseLstn) for e in releaseEvents
+  
+  upTouchLstn = (e) ->
+    obeyMouseEvents = no if e.type is 'touchstart'
+    return unless e.type is 'touchstart' or obeyMouseEvents
     up.stdClass = up.className
     up.className += ' highlighted'
-    upFunc()  
-  up.addEventListener 'mouseup', ->
-    up.className = up.stdClass
+    upFunc()
+  up.addEventListener(e, upTouchLstn) for e in touchEvents
+  upReleaseLstn = (e) -> up.className = up.stdClass
+  up.addEventListener(e, upReleaseLstn) for e in releaseEvents
 
 button = (parent, func) ->
   btn = tag {className: 'button', parent}  
-  btn.addEventListener 'mousedown', ->
+  touchLstn = (e) ->
+    obeyMouseEvents = no if e.type is 'touchstart'
+    return unless e.type is 'touchstart' or obeyMouseEvents
     btn.stdClass = btn.className
     btn.className += ' highlighted'
     func()  
-  btn.addEventListener 'mouseup', ->
-    btn.className = btn.stdClass
+  btn.addEventListener(e, touchLstn) for e in touchEvents
+  releaseLstn = (e) -> btn.className = btn.stdClass
+  btn.addEventListener(e, releaseLstn) for e in releaseEvents
 
 body = document.getElementsByTagName('body')[0]
 
