@@ -35,61 +35,60 @@ obeyMouseEvents = yes
 
 rocker = (parent, downFunc, upFunc) ->
   outer = tag {className: 'rocker', parent}
-    
-  down = tag {className: 'down', parent: outer}
+  tag {className: 'shadow-hider', parent: outer}
+  tag {className: 'divider', parent: outer}
+  
+  down = tag {parent: outer}
   tag {className: 'minus', parent: down}
-  tag {className: 'divider', parent: down}
     
-  up = tag {className: 'up', parent: outer}
+  up = tag {parent: outer}
   tag {className: 'plus-h', parent: up}
   tag {className: 'plus-v', parent: up}
-  tag {className: 'shadow-hider', parent: up}
     
   downTouchLstn = (e) ->
     obeyMouseEvents = no if e.type is 'touchstart'
     return unless e.type is 'touchstart' or obeyMouseEvents
-    down.stdClass = down.className
     down.className += ' highlighted'
     downFunc()
   down.addEventListener(e, downTouchLstn) for e in touchEvents
-  downReleaseLstn = (e) -> down.className = down.stdClass
-  down.addEventListener(e, downReleaseLstn) for e in releaseEvents
   
   upTouchLstn = (e) ->
     obeyMouseEvents = no if e.type is 'touchstart'
     return unless e.type is 'touchstart' or obeyMouseEvents
-    up.stdClass = up.className
     up.className += ' highlighted'
     upFunc()
   up.addEventListener(e, upTouchLstn) for e in touchEvents
-  upReleaseLstn = (e) -> up.className = up.stdClass
-  up.addEventListener(e, upReleaseLstn) for e in releaseEvents
+  
+  releaseLstn = (e) -> up.className = 'up'; down.className = 'down'
+  document.addEventListener(e, releaseLstn) for e in releaseEvents
+  releaseLstn()
 
 button = (parent, func) ->
-  btn = tag {className: 'button', parent}  
+  btn = tag {parent}
+  
   touchLstn = (e) ->
     obeyMouseEvents = no if e.type is 'touchstart'
     return unless e.type is 'touchstart' or obeyMouseEvents
-    btn.stdClass = btn.className
     btn.className += ' highlighted'
     func()  
   btn.addEventListener(e, touchLstn) for e in touchEvents
-  releaseLstn = (e) -> btn.className = btn.stdClass
-  btn.addEventListener(e, releaseLstn) for e in releaseEvents
+  
+  releaseLstn = (e) -> btn.className = 'button'
+  document.addEventListener(e, releaseLstn) for e in releaseEvents
+  releaseLstn()
 
 body = document.getElementsByTagName('body')[0]
 
 rocker(body, (-> cmd 'a-down'), (-> cmd 'a-up'))
-tag {className: 'label', parent: body, text: 'Agents'}
+tag {className: 'label', parent: body, text: 'Agent'}
 
 rocker(body, (-> cmd 'n-down'), (-> cmd 'n-up'))
 tag {className: 'label', parent: body, text: 'Network'}
   
-rocker(body, (-> cmd 'o-down'), (-> cmd 'o-up'))
-tag {className: 'label', parent: body, text: 'Nodes'}
+rocker(body, (-> cmd 'g-down'), (-> cmd 'g-up'))
+tag {className: 'label', parent: body, text: 'Goal'}
 
 button(body, (-> cmd 'reset'))
 tag {className: 'label', parent: body, text: 'Reset'}
 
-      
       

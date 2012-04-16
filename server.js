@@ -13,7 +13,7 @@
   page = fs.readFileSync('index.html.gz');
 
   httpCallback = function(request, response) {
-    var c, m, _i, _len, _ref;
+    var c, cmd, m, _i, _len, _ref;
     m = request.method;
     if (m === 'GET' || m === 'HEAD') {
       if (request.url === '/') {
@@ -22,15 +22,16 @@
           response.write(page);
         }
       } else {
+        cmd = request.url.slice(1);
         if (m === 'GET') {
           response.write('OK');
         }
         _ref = wsServer.connections;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           c = _ref[_i];
-          c.sendUTF(request.url);
+          c.sendUTF(cmd);
         }
-        log('relayed: ' + request.url);
+        log('relayed: ' + cmd);
       }
     } else {
       response.writeHead(501, 'Not Implemented');

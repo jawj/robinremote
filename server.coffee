@@ -13,9 +13,10 @@ httpCallback = (request, response) ->
       response.setHeader('Content-Encoding', 'gzip')
       response.write(page) if m is 'GET'
     else
+      cmd = request.url.slice(1)
       response.write('OK') if m is 'GET'
-      c.sendUTF(request.url) for c in wsServer.connections
-      log('relayed: ' + request.url)
+      c.sendUTF(cmd) for c in wsServer.connections
+      log('relayed: ' + cmd)
   else
     response.writeHead(501, 'Not Implemented')
   response.end()

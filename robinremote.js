@@ -73,25 +73,27 @@
   obeyMouseEvents = true;
 
   rocker = function(parent, downFunc, upFunc) {
-    var down, downReleaseLstn, downTouchLstn, e, outer, up, upReleaseLstn, upTouchLstn, _i, _j, _k, _l, _len, _len1, _len2, _len3, _results;
+    var down, downTouchLstn, e, outer, releaseLstn, up, upTouchLstn, _i, _j, _k, _len, _len1, _len2;
     outer = tag({
       className: 'rocker',
       parent: parent
     });
+    tag({
+      className: 'shadow-hider',
+      parent: outer
+    });
+    tag({
+      className: 'divider',
+      parent: outer
+    });
     down = tag({
-      className: 'down',
       parent: outer
     });
     tag({
       className: 'minus',
       parent: down
     });
-    tag({
-      className: 'divider',
-      parent: down
-    });
     up = tag({
-      className: 'up',
       parent: outer
     });
     tag({
@@ -102,10 +104,6 @@
       className: 'plus-v',
       parent: up
     });
-    tag({
-      className: 'shadow-hider',
-      parent: up
-    });
     downTouchLstn = function(e) {
       if (e.type === 'touchstart') {
         obeyMouseEvents = false;
@@ -113,20 +111,12 @@
       if (!(e.type === 'touchstart' || obeyMouseEvents)) {
         return;
       }
-      down.stdClass = down.className;
       down.className += ' highlighted';
       return downFunc();
     };
     for (_i = 0, _len = touchEvents.length; _i < _len; _i++) {
       e = touchEvents[_i];
       down.addEventListener(e, downTouchLstn);
-    }
-    downReleaseLstn = function(e) {
-      return down.className = down.stdClass;
-    };
-    for (_j = 0, _len1 = releaseEvents.length; _j < _len1; _j++) {
-      e = releaseEvents[_j];
-      down.addEventListener(e, downReleaseLstn);
     }
     upTouchLstn = function(e) {
       if (e.type === 'touchstart') {
@@ -135,29 +125,27 @@
       if (!(e.type === 'touchstart' || obeyMouseEvents)) {
         return;
       }
-      up.stdClass = up.className;
       up.className += ' highlighted';
       return upFunc();
     };
-    for (_k = 0, _len2 = touchEvents.length; _k < _len2; _k++) {
-      e = touchEvents[_k];
+    for (_j = 0, _len1 = touchEvents.length; _j < _len1; _j++) {
+      e = touchEvents[_j];
       up.addEventListener(e, upTouchLstn);
     }
-    upReleaseLstn = function(e) {
-      return up.className = up.stdClass;
+    releaseLstn = function(e) {
+      up.className = 'up';
+      return down.className = 'down';
     };
-    _results = [];
-    for (_l = 0, _len3 = releaseEvents.length; _l < _len3; _l++) {
-      e = releaseEvents[_l];
-      _results.push(up.addEventListener(e, upReleaseLstn));
+    for (_k = 0, _len2 = releaseEvents.length; _k < _len2; _k++) {
+      e = releaseEvents[_k];
+      document.addEventListener(e, releaseLstn);
     }
-    return _results;
+    return releaseLstn();
   };
 
   button = function(parent, func) {
-    var btn, e, releaseLstn, touchLstn, _i, _j, _len, _len1, _results;
+    var btn, e, releaseLstn, touchLstn, _i, _j, _len, _len1;
     btn = tag({
-      className: 'button',
       parent: parent
     });
     touchLstn = function(e) {
@@ -167,7 +155,6 @@
       if (!(e.type === 'touchstart' || obeyMouseEvents)) {
         return;
       }
-      btn.stdClass = btn.className;
       btn.className += ' highlighted';
       return func();
     };
@@ -176,14 +163,13 @@
       btn.addEventListener(e, touchLstn);
     }
     releaseLstn = function(e) {
-      return btn.className = btn.stdClass;
+      return btn.className = 'button';
     };
-    _results = [];
     for (_j = 0, _len1 = releaseEvents.length; _j < _len1; _j++) {
       e = releaseEvents[_j];
-      _results.push(btn.addEventListener(e, releaseLstn));
+      document.addEventListener(e, releaseLstn);
     }
-    return _results;
+    return releaseLstn();
   };
 
   body = document.getElementsByTagName('body')[0];
@@ -197,7 +183,7 @@
   tag({
     className: 'label',
     parent: body,
-    text: 'Agents'
+    text: 'Agent'
   });
 
   rocker(body, (function() {
@@ -213,15 +199,15 @@
   });
 
   rocker(body, (function() {
-    return cmd('o-down');
+    return cmd('g-down');
   }), (function() {
-    return cmd('o-up');
+    return cmd('g-up');
   }));
 
   tag({
     className: 'label',
     parent: body,
-    text: 'Nodes'
+    text: 'Goal'
   });
 
   button(body, (function() {
